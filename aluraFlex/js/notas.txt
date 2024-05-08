@@ -1,0 +1,118 @@
+import {conexionAPI} from "./conexionAPI.js";
+
+const lista = document.querySelector("[data-lista]");
+// cada vez que se ejecute la data-lista se estara creando un li 
+function crearCard(titulo, descripcion, url, imagen){
+    const video = document.createElement("li")
+    // modificando la clase del video 
+    video.className = "videos__item";
+    //Indicamos cual va hacer la estructura que va segir este video 
+    video.innerHTML = 
+        `   <iframe width="100%" height="72%" src="${url}"
+            title="${titulo}" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+            <div class="descripcion-video">
+                <img src="${imagen}" alt="logo canal alura">
+                <h3>${titulo}</h3>
+                <p>${descripcion}</p>
+            </div>`
+    return video;
+}
+// tiene que ser asincrono ya que la funcion que estamos llamando es asincrona
+async function listarVideos(){
+    const listaAPI = await conexionAPI.listarVideos();    
+    listaAPI.forEach((video) => lista.appendChild(crearCard(video.titulo, video.descripcion, video.url, video.imagen)) );
+}
+listarVideos();
+
+
+/**/
+import { conexionAPI } from "./conexionAPI.js";
+
+const lista = document.querySelector("[data-lista]")
+
+export default function crearCard(titulo,descripcion,url,imagen){
+    const video = document.createElement("li");
+    video.className="videos__item";
+    video.innerHTML=`<iframe width="100%" height="72%" src="${url}"
+    title="${titulo}" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe>
+    <div class="descripcion-video">
+        <img src="./img/logo.png" alt="logo canal alura">
+        <h3>${titulo}</h3>
+        <p>${descripcion}</p>
+    </div>`;
+
+    return video;
+}
+
+async function listarVideos(){
+        const listaAPI = await conexionAPI.listarVideos()
+     listaAPI.forEach(video=>lista.appendChild(crearCard(video.titulo,video.descripcion,video.url,video.imagen)))
+   
+}
+
+listarVideos()
+
+
+
+
+async function enviarVideo(titulo, descripcion, url, imagen){
+    const conexion = await fetch("http://localhost:3001/videos", {
+        method: "POST", 
+        //el ecabezado es el tipo de archivo que va estar pidiendo en esa consulta si es un archivo de video imagen html json o js
+        headers: {"Content-type": "aplication/json"},
+        // y por ultimo el cuerpo de este mensaje 
+        // JSON.stringify para convertir el tipo objeto al tipo string
+        body: JSON.stringify({
+            titulo:titulo,
+            //usaremos un temple string
+            descripcion:`${descripcion} mil visualizaciones`,
+            url:url,
+            imagen:imagen
+        })
+    });
+
+    //convertir esa peticion al formato Json
+    const conexionConvertida= conexion.json ();
+    // esto nos va retornar un elemento en fortmato json cuando sea activada la funcion crearVideo 
+    return conexionConvertida;
+}
+// vamos a exportar la API
+export const conexionAPI = {
+    listarVideos, enviarVideo
+}
+
+//listarVideos();
+
+
+///CRear videop
+
+import { conexionAPI } from "./conexionAPI.js";
+
+
+const formulario = document.querySelector("[data-formulario]");
+
+async function crearVideo(evento){
+//esto va evitar que se ejecute de forma automatica
+    evento.preventDefault();
+    // estamos capturando todo el elemento input y unicamente obtener el valor
+    const titulo = document.querySelector("[data-titulo]").value;
+    const url = document.querySelector("[data-url]").value;
+    const imagen = document.querySelector("[data-imagen]").value;
+    // vamos a enviar la descripcion 
+    // vamos a crear un elemento aleatorio
+    const descripcion = Math.floor(Math.random*10).toString();
+
+   await conexionAPI.enviarVideo(titulo, descripcion, url, imagen)
+   // enviamos al usuario a otra pagina
+   window.location.href = "../pages/envio-concluido.html"
+
+}
+
+// ahora vamos a capturar la accion del formulario
+//este lo que indica es que estara al pendiente de 
+//escuchar el parametro sumit el va estar pendiente para ejecutar un evento
+formulario.addEventListener("submit", vento => crearVideo(evento) );
