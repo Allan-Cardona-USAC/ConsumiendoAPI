@@ -1,0 +1,32 @@
+{
+  "name": "alura-play",
+  "version": "1.0.0",
+  "description": "<p align=\"center\"> <img src=\"https://github.com/josevflores911/JavaScript/blob/main/img/encabezado/screenshoot_d.PNG\" alt=\"Javascript: creando requisiciones\"> </p>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josevflores911/JavaScript.git"
+  },
+  "author": "J",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josevflores911/JavaScript/issues"
+  },
+  "homepage": "https://github.com/josevflores911/JavaScript#readme",
+  "dependencies": {
+    "jason": "^2.0.0",
+    "json-server": "^0.17.3",
+    "server": "^1.0.39"
+  },
+  "keywords": [
+    "plataforma",
+    "de",
+    "intercambio",
+    "de",
+    "videos"
+  ],
+  "devDependencies": {}
+}
